@@ -117,7 +117,15 @@ public class WordleGWindow {
  */
 
     public void setKeyColor(String label, Color color) {
-        canvas.setKeyColor(label, color);
+        try
+        {
+            canvas.setKeyColor(label, color);
+        }
+        catch (Exception e)
+        {
+            System.err.println("\"" + label + "\"" + " Key does not exist, make sure you are using capital letters.");
+
+        }
     }
 
 /**

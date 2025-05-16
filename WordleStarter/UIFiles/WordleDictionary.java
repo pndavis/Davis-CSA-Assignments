@@ -34,7 +34,7 @@ public class WordleDictionary {
         //List<String> tempList = new ArrayList<>();
 
         try {
-            URL dictionaryDownload = new URL("https://gist.githubusercontent.com/dracos/dd0668f281e685bad51479e5acaadb93/raw/6bfa15d263d6d5b63840a8e5b64e04b382fdb079/valid-wordle-words.txt?scrlybrkr=c3a43dc7");
+            URL dictionaryDownload = URI.create("https://raw.githubusercontent.com/pndavis/Davis-CSA-Assignments/refs/heads/main/WordleStarter/UIFiles/valid-wordle-words.txt").toURL();
             BufferedReader br = new BufferedReader(new InputStreamReader(dictionaryDownload.openStream()));
             BufferedWriter writer = new BufferedWriter(new FileWriter(filePath));
             // read from your scanner
@@ -43,23 +43,28 @@ public class WordleDictionary {
                 writer.write(line);
                 writer.newLine();
             }
+            writer.close();
+            System.out.println("Dictionary successfully updated");
 
-        } catch (e) {
+        } catch (Exception e) {
 
         }
 
+        List<String> tempList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) 
         {
-            List<String> tempList = new ArrayList<>();
+            
             String line;
             while ((line = br.readLine()) != null) {
                 tempList.add(line);
             }
+            
         } catch (IOException e) {
             //e.printStackTrace();
             System.out.println("File not found! Make sure you have the valid-wordle-words.txt file in the UIFiles folder!"); 
         }
         FIVE_LETTER_WORDS = tempList.toArray(new String[0]);
+        
     }
     
     static 

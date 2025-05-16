@@ -39,9 +39,6 @@ public class Wordle
         wordleGame.setSquareColor(0, 0, WordleGWindow.CORRECT_COLOR);
         wordleGame.showMessage("You have to implement this method.");
         
-        for(String word : testArray){
-            System.out.println(word);
-        }
     }
     
     
