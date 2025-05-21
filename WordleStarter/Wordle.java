@@ -14,13 +14,13 @@ public class Wordle
     private WordleGWindow wordleGame;
     String[] dictionaryArray = WordleDictionary.FIVE_LETTER_WORDS; //This String array contains all the words in the dictionary
     String[] testArray = WordleDictionary.TEST_WORDS; //This String array is used for testing if needed. Modify the test-words.txt file to change it.
-    private String correctWord;
+    private String correctWord = "aaaaa";
     
 
     /* Sets correctWord to a word randomly choosen from the dictionary */
     public void setCorrectWord()
     {
-        System.out.println("No correct word choosen");
+        System.out.println("The correct word is: " + correctWord);
 
     }
 
@@ -44,7 +44,7 @@ public class Wordle
     
     
 
-    /* Startup code. You do not need to edit anything about this! */
+    /* Startup code. You do not need to edit anything below this! */
 
     public void run() 
     {
