@@ -461,7 +461,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
             showMessage("");
             if (row < N_ROWS && col > 0) {
                 col--;
-                grid[row][col].setLetter(" ");
+                grid[row][col].setLetter("");
                 repaint();
             }
         } else if (letter == ENTER) {
