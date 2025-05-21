@@ -908,6 +908,7 @@ pique
 pithy
 pixel
 pixie
+pizza
 place
 plait
 plane
