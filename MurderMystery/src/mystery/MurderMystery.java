@@ -33,7 +33,7 @@ public class MurderMystery {
     public static void main(String[] args) {
 
         MurderMystery.clearScreen();
-        System.out.println("Please enter your loginID:");
+        System.out.println("Please enter your SPS Username:");
         String loginID = StdIn.readString();
         StdIn.readLine();
 
@@ -277,7 +277,7 @@ public class MurderMystery {
         for (String question : questions) {
             System.out.println("Question " + (i + 1) + " / " + questions.length);
             System.out.println(question);
-            answers[i++] = StdIn.readLine();
+            answers[i++] = question + " " + StdIn.readLine();
             MurderMystery.clearScreen();
         }
         return answers;
