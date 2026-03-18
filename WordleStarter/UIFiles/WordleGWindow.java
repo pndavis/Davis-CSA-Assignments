@@ -57,6 +57,7 @@ public class WordleGWindow {
         frame.add(canvas, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
+        frame.setSize(500, 400); 
     }
 
 /**
@@ -171,6 +172,23 @@ public class WordleGWindow {
     }
 
 /**
+ * Changes the state of the game between active and not active
+ *
+ * @param gameState The new state of the game
+ */
+    public void setGameState(boolean gameState)
+    {
+        canvas.setGameState(gameState);
+    }
+
+    public void resetGame()
+    {
+        canvas.initWordleGrid();
+        canvas.initWordleKeys();
+        setCurrentRow(0);
+    }
+
+/**
  * Adds an event listener to the window, which in this application is
  * triggered by hitting the RETURN key or pressing the ENTER button.
  *
@@ -187,7 +205,11 @@ public class WordleGWindow {
 
 }
 
+
+
 class WordleCanvas extends JComponent implements KeyListener, MouseListener {
+
+    boolean gameActive = true;
 
     public WordleCanvas() {
         setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
@@ -295,6 +317,17 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
         }
         repaint();
     }
+/**
+ * Changes the state of the game between active and not active
+ *
+ * @param gameState The new state of the game
+ */
+    public void setGameState(boolean gameState)
+    {
+        gameActive = gameState;
+    }
+
+/**
 
 /**
  * Gets the current row number.
@@ -337,6 +370,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
 
     @Override
     public void paintComponent(Graphics g) {
+        //updateValues();
         for (int row = 0; row < N_ROWS; row++) {
             for (int col = 0; col < N_COLS; col++) {
                 grid[row][col].paint(g);
@@ -349,7 +383,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
         g.setFont(Font.decode(MESSAGE_FONT));
         FontMetrics fm = g.getFontMetrics();
         int tx = (CANVAS_WIDTH - fm.stringWidth(message)) / 2;
-        int y = (int)(MESSAGE_Y  * (getHeight() / 700.0));
+        int y = (int)(MESSAGE_Y  * (getHeight() / (double) CANVAS_HEIGHT));
         g.drawString(message, tx, y);        
     }
 
@@ -374,15 +408,18 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        String key = findKey(e.getX(), e.getY());
-        if (key != null) {
-            char ch = key.charAt(0);
-            if (key.equals("DELETE")) {
-                ch = DELETE;
-            } else if (key.equals("ENTER")) {
-                ch = ENTER;
+        if(gameActive)
+        {
+            String key = findKey(e.getX(), e.getY());
+            if (key != null) {
+                char ch = key.charAt(0);
+                if (key.equals("DELETE")) {
+                    ch = DELETE;
+                } else if (key.equals("ENTER")) {
+                    ch = ENTER;
+                }
+                keyAction(ch);
             }
-            keyAction(ch);
         }
     }
 
@@ -413,7 +450,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
  * WordleSquare objects.
  */
 
-    private void initWordleGrid() {
+    protected void initWordleGrid() {
         grid = new WordleSquare[N_ROWS][N_COLS];
         int x0 = (CANVAS_WIDTH - BOARD_WIDTH) / 2;
         for (int row = 0; row < N_ROWS; row++) {
@@ -430,7 +467,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
  * WordleKey objects.
  */
 
-    private void initWordleKeys() {
+    protected void initWordleKeys() {
         keys = new HashMap<String,WordleKey>();
         int nk = KEY_LABELS[0].length;
         int y0 = CANVAS_HEIGHT - BOTTOM_MARGIN - 3 * KEY_HEIGHT - 2 * KEY_YSEP;
@@ -459,29 +496,32 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
  */
 
     private void keyAction(char letter) {
-        letter = Character.toUpperCase(letter);
-        if (letter == DELETE) {
-            showMessage("");
-            if (row < N_ROWS && col > 0) {
-                col--;
-                grid[row][col].setLetter("");
-                repaint();
-            }
-        } else if (letter == ENTER) {
-            showMessage("");
-            for (WordleEventListener listener : listeners) {
-                String s = "";
-                for (int col = 0; col < N_COLS; col++) {
-                    s += grid[this.row][col].getLetter();
+        if(gameActive)
+        {
+            letter = Character.toUpperCase(letter);
+            if (letter == DELETE) {
+                showMessage("");
+                if (row < N_ROWS && col > 0) {
+                    col--;
+                    grid[row][col].setLetter("");
+                    repaint();
                 }
-                listener.eventAction(s);
-            }
-        } else if (Character.isLetter(letter)) {
-            showMessage("");
-            if (row < N_ROWS && col < N_COLS) {
-                grid[row][col].setLetter("" + letter);
-                col++;
-                repaint();
+            } else if (letter == ENTER) {
+                showMessage("");
+                for (WordleEventListener listener : listeners) {
+                    String s = "";
+                    for (int col = 0; col < N_COLS; col++) {
+                        s += grid[this.row][col].getLetter();
+                    }
+                    listener.eventAction(s);
+                }
+            } else if (Character.isLetter(letter)) {
+                showMessage("");
+                if (row < N_ROWS && col < N_COLS) {
+                    grid[row][col].setLetter("" + letter);
+                    col++;
+                    repaint();
+                }
             }
         }
     }
@@ -517,19 +557,19 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
             if (color.equals(UNKNOWN_COLOR)) {
                 fg = Color.BLACK;
             }
-            x = (int)(startX  * (getWidth() / 500.0));
-            y = (int)(startY  * (getHeight() / 700.0));
-            SQUARE_SIZE = (int)(60  * (getHeight() / 700.0));
+            x = (int)(startX  * (getWidth() / (double) CANVAS_WIDTH));
+            y = (int)(startY  * (getHeight() / (double) CANVAS_HEIGHT));
+            SQUARE_SIZE = (int)(60  * (getHeight() / (double) CANVAS_HEIGHT));
             //getWidth(), getHeight()
             g.setColor(color);
             g.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
             g.setColor(Color.BLACK);
             g.drawRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
-            SQUARE_FONT = "Helvetica Neue-bold-" + (int)(44  * (getHeight() / 700.0));
+            SQUARE_FONT = "Helvetica Neue-bold-" + (int)(44  * (getHeight() / (double) CANVAS_HEIGHT));
             g.setFont(Font.decode(SQUARE_FONT));
             FontMetrics fm = g.getFontMetrics();
             int tx = x + (SQUARE_SIZE - fm.stringWidth(letter)) / 2;
-            SQUARE_LABEL_DY = (int)(18  * (getHeight() / 700.0));
+            SQUARE_LABEL_DY = (int)(18  * (getHeight() / (double) CANVAS_HEIGHT));
             int ty = y + SQUARE_SIZE / 2 + SQUARE_LABEL_DY;
             g.setColor(fg);
             g.drawString(letter, tx, ty);
@@ -581,13 +621,12 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
                 fg = Color.BLACK;
             }
             g.setColor(color);
-            //x = startX * (700 / (getHeight()/ 10));
-            x = (int)(startX  * (getWidth() / 500.0));
-            y = (int)(startY  * (getHeight() / 700.0));
-            KEY_HEIGHT = (int)(60  * (getHeight() / 700.0));
+            x = (int)(startX  * (getWidth() / (double) CANVAS_WIDTH));
+            y = (int)(startY  * (getHeight() / (double) CANVAS_HEIGHT));
+            KEY_HEIGHT = (int)(60  * (getHeight() / (double) CANVAS_HEIGHT));
             g.fillRoundRect(x, y, width, KEY_HEIGHT, corner, corner);
             String key = label;
-            String font = "Helvetica Neue-" + (int)(12  * (getHeight() / 700.0) + 6);
+            String font = "Helvetica Neue-" + (int)(12  * (getHeight() / (double) CANVAS_HEIGHT) + 6);
             
             if (key.equals("ENTER")) {
                 font = ENTER_FONT;
