@@ -53,6 +53,7 @@ public class WordleGWindow {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         canvas = new WordleCanvas();
+        frame.setResizable(true);
         frame.add(canvas, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
@@ -190,6 +191,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
 
     public WordleCanvas() {
         setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+        
         initWordleGrid();
         initWordleKeys();
         message = "";
@@ -347,7 +349,8 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
         g.setFont(Font.decode(MESSAGE_FONT));
         FontMetrics fm = g.getFontMetrics();
         int tx = (CANVAS_WIDTH - fm.stringWidth(message)) / 2;
-        g.drawString(message, tx, MESSAGE_Y);        
+        int y = (int)(MESSAGE_Y  * (getHeight() / 700.0));
+        g.drawString(message, tx, y);        
     }
 
 /* KeyListener */
@@ -505,6 +508,8 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
             this.y = y;
             this.letter = "";
             this.color = UNKNOWN_COLOR;
+            startX = x;
+            startY = y;
         }
 
         public void paint(Graphics g) {
@@ -512,13 +517,19 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
             if (color.equals(UNKNOWN_COLOR)) {
                 fg = Color.BLACK;
             }
+            x = (int)(startX  * (getWidth() / 500.0));
+            y = (int)(startY  * (getHeight() / 700.0));
+            SQUARE_SIZE = (int)(60  * (getHeight() / 700.0));
+            //getWidth(), getHeight()
             g.setColor(color);
             g.fillRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
             g.setColor(Color.BLACK);
             g.drawRect(x, y, SQUARE_SIZE, SQUARE_SIZE);
+            SQUARE_FONT = "Helvetica Neue-bold-" + (int)(44  * (getHeight() / 700.0));
             g.setFont(Font.decode(SQUARE_FONT));
             FontMetrics fm = g.getFontMetrics();
             int tx = x + (SQUARE_SIZE - fm.stringWidth(letter)) / 2;
+            SQUARE_LABEL_DY = (int)(18  * (getHeight() / 700.0));
             int ty = y + SQUARE_SIZE / 2 + SQUARE_LABEL_DY;
             g.setColor(fg);
             g.drawString(letter, tx, ty);
@@ -546,6 +557,8 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
         private String letter;
         private int x;
         private int y;
+        private int startX;
+        private int startY;
 
     };
 
@@ -557,6 +570,8 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
             this.width = width;
             this.label = label;
             this.color = KEY_COLOR;
+            startX = x;
+            startY = y;
         }
 
         public void paint(Graphics g) {
@@ -566,15 +581,20 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
                 fg = Color.BLACK;
             }
             g.setColor(color);
+            //x = startX * (700 / (getHeight()/ 10));
+            x = (int)(startX  * (getWidth() / 500.0));
+            y = (int)(startY  * (getHeight() / 700.0));
+            KEY_HEIGHT = (int)(60  * (getHeight() / 700.0));
             g.fillRoundRect(x, y, width, KEY_HEIGHT, corner, corner);
             String key = label;
-            String font = KEY_FONT;
+            String font = "Helvetica Neue-" + (int)(12  * (getHeight() / 700.0) + 6);
+            
             if (key.equals("ENTER")) {
                 font = ENTER_FONT;
             } else if (key == "DELETE") {
                 key = "\u232B";
             }
-            g.setFont(Font.decode(font));
+            g.setFont(Font.decode(font).deriveFont(Font.BOLD));
             FontMetrics fm = g.getFontMetrics();
             int tx = x + (width - fm.stringWidth(key)) / 2;
             int ty = y + KEY_HEIGHT / 2 + KEY_LABEL_DY;
@@ -610,6 +630,8 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
         private int width;
         private int x;
         private int y;
+        private int startX;
+        private int startY;
 
     }
 
@@ -627,15 +649,15 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
     public static final int CANVAS_WIDTH = 500;
     public static final int CANVAS_HEIGHT = 700;
 
-    public static final int SQUARE_SIZE = 60;
+    public static int SQUARE_SIZE = 60;
     public static final int SQUARE_SEP = 5;
-    public static final int SQUARE_LABEL_DY = 18;
+    public static int SQUARE_LABEL_DY = 18;
     public static final int TOP_MARGIN = 30;
     public static final int BOTTOM_MARGIN = 30;
-    public static final int MESSAGE_SEP = 24;
+    public static final int MESSAGE_SEP = 35;
 
     public static final int KEY_WIDTH = 40;
-    public static final int KEY_HEIGHT = 60;
+    public static int KEY_HEIGHT = 60;
     public static final int KEY_CORNER = 9;
     public static final int KEY_LABEL_DY = 7;
     public static final int KEY_XSEP = 5;
@@ -644,7 +666,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
     public static final int DELETE = (char) 8;
     public static final int ENTER = (char) 10;
 
-    public static final String SQUARE_FONT = "Helvetica Neue-bold-44";
+    public static String SQUARE_FONT = "Helvetica Neue-bold-44";
     public static final String MESSAGE_FONT = "Helvetica Neue-bold-20";
     public static final String KEY_FONT = "Helvetica Neue-18";
     public static final String ENTER_FONT = "Helvetica Neue-14";
@@ -657,14 +679,15 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
 
 /* Derived constants */
 
-    public static final int SQUARE_DELTA = SQUARE_SIZE + SQUARE_SEP;
-    public static final int BOARD_WIDTH =
+    public static int SQUARE_DELTA = SQUARE_SIZE + SQUARE_SEP;
+    public static int BOARD_WIDTH =
         N_COLS * SQUARE_SIZE + (N_COLS - 1) * SQUARE_SEP;
-    public static final int BOARD_HEIGHT =
+    public static int BOARD_HEIGHT =
         N_ROWS * SQUARE_SIZE + (N_ROWS - 1) * SQUARE_SEP;
-    public static final int MESSAGE_X = CANVAS_WIDTH / 2;
-    public static final int MESSAGE_Y =
+    public static int MESSAGE_X = CANVAS_WIDTH / 2;
+    public static int MESSAGE_Y =
         TOP_MARGIN + BOARD_HEIGHT + MESSAGE_SEP;
+    
 
 /* Private instance variables */
 
