@@ -57,7 +57,7 @@ public class WordleGWindow {
         frame.add(canvas, BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(500, 400); 
+        frame.setSize(500, 700); 
     }
 
 /**

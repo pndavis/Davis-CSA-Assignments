@@ -1,7 +1,8 @@
 /*
  * File: Wordle.java
  * Name: ___________
- * Date: 5/15/2025
+ * Period: __________
+ * Date: 3/19/2026
  * -----------------
  * This module is the starter file for the Wordle assignment.
  */
