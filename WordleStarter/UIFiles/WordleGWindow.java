@@ -382,7 +382,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
         g.setColor(Color.BLACK);
         g.setFont(Font.decode(MESSAGE_FONT));
         FontMetrics fm = g.getFontMetrics();
-        int tx = (CANVAS_WIDTH - fm.stringWidth(message)) / 2;
+        int tx = (getWidth() - fm.stringWidth(message)) / 2;
         int y = (int)(MESSAGE_Y  * (getHeight() / (double) CANVAS_HEIGHT));
         g.drawString(message, tx, y);        
     }
