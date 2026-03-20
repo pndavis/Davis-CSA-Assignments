@@ -68,6 +68,7 @@ aptly
 arbor
 ardor
 argue
+armor
 aroma
 arrow
 artsy
@@ -172,11 +173,13 @@ brass
 brave
 bravo
 brawn
+braze
 bread
 break
 breed
 briar
 bribe
+brick
 bride
 brief
 brine
@@ -278,11 +281,13 @@ cluck
 coach
 coast
 cocoa
+codes
 colon
 comet
 comma
 condo
 conic
+cookd
 corer
 corny
 could
@@ -382,6 +387,7 @@ droop
 drove
 dryer
 duchy
+ducks
 dummy
 dutch
 duvet
@@ -396,6 +402,8 @@ easel
 ebony
 echos
 edict
+edify
+eerie
 egret
 eject
 elbow
@@ -499,9 +507,11 @@ foray
 force
 forge
 forgo
+forms
 forte
 forth
 forty
+forum
 found
 foyer
 frail
@@ -615,6 +625,7 @@ helix
 hello
 hence
 heron
+hexed
 hills
 hilly
 hinge
@@ -642,6 +653,7 @@ hutch
 hyena
 hyper
 icing
+idiom
 idler
 igloo
 image
@@ -681,8 +693,10 @@ karma
 kayak
 kazoo
 kebab
+kerns
 khaki
 kiosk
+kitty
 knack
 knave
 knead
@@ -758,6 +772,7 @@ magic
 magma
 maize
 major
+makes
 mambo
 manga
 mango
@@ -840,6 +855,7 @@ ninja
 ninth
 noble
 noise
+norms
 north
 nudge
 nurse
@@ -926,6 +942,7 @@ poker
 polar
 polka
 polyp
+poppy
 porch
 pound
 power
@@ -1120,6 +1137,7 @@ slosh
 sloth
 slump
 slung
+slyly
 small
 smart
 smash
@@ -1146,6 +1164,7 @@ soggy
 solar
 solid
 solve
+songs
 sonic
 sorry
 sound
@@ -1247,6 +1266,7 @@ swine
 swirl
 swish
 swoon
+sword
 swung
 syrup
 table
@@ -1341,6 +1361,7 @@ truss
 trust
 truth
 tryst
+tuber
 tunic
 turbo
 tutor
@@ -1428,6 +1449,7 @@ whisk
 whoop
 whose
 widen
+wikis
 wince
 winch
 windy
