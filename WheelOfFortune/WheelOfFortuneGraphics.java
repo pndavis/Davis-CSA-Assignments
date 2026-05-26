@@ -26,6 +26,8 @@ public class WheelOfFortuneGraphics extends JPanel {
     JButton removeSliceButton = new JButton("Remove Slice");
     public JTextField textField;
     public JTextField textField2;
+
+    boolean spinning = false;
     
     public WheelOfFortuneGraphics(GameWheel wheel, playGame game) {
         
@@ -184,39 +186,43 @@ public class WheelOfFortuneGraphics extends JPanel {
     }
 
     private void spinWheel() {
-        
-        wheel.numSlices();
-        Slice spinResult = currentGame.beginSpin();
-        int index = 0;
-        for(int i = 0; i < wheel.slices.size(); i++){
-            if(wheel.slices.get(i).equals(spinResult)){
-                index = i;
+        if(!spinning){
+            wheel.numSlices();
+            Slice spinResult = currentGame.beginSpin();
+            int index = 0;
+            for(int i = 0; i < wheel.slices.size(); i++){
+                if(wheel.slices.get(i).equals(spinResult)){
+                    index = i;
+                }
             }
+            
+            double randomMin = ((360.0 / numSlices) * 0.9);
+            double randomMax = ((360.0 / numSlices) * 0.1);
+            double arcRange = Math.random() * (randomMax - randomMin) + randomMin;
+            spinTime = ((index * (360.0/numSlices)) + 360 + arcRange - rotationAngle);
+            //System.out.println(numSlices + " " + arcRange + " " + spinTime);
+            if(spinTime < 360)
+            {
+                spinTime += 360;
+            }
+            //System.out.println("Index: " + index + ", Prize Ammount: " + wheel.slices.get(index).getPrizeAmount() + ", currentRotation: " + rotationAngle + ", total spin degrees: " + spinTime + "; Numslices: " + numSlices);
+            spinning = true;
+            new Timer(1, e -> {
+                
+                rotationAngle += 4;
+                if (rotationAngle >= 360) {
+                    rotationAngle %= 360;
+                }
+                spinTime -= 4;
+                repaint();
+                if (spinTime <= 0) {
+                    ((Timer) e.getSource()).stop();
+                    spinning = false;
+                    currentGame.endSpin();
+                }
+            }).start();
+            
         }
-        
-        double randomMin = ((360.0 / numSlices) * 0.9);
-        double randomMax = ((360.0 / numSlices) * 0.1);
-        double arcRange = Math.random() * (randomMax - randomMin) + randomMin;
-        spinTime = ((index * (360.0/numSlices)) + 360 + arcRange - rotationAngle);
-        //System.out.println(numSlices + " " + arcRange + " " + spinTime);
-        if(spinTime < 360)
-        {
-            spinTime += 360;
-        }
-        //System.out.println("Index: " + index + ", Prize Ammount: " + wheel.slices.get(index).getPrizeAmount() + ", currentRotation: " + rotationAngle + ", total spin degrees: " + spinTime + "; Numslices: " + numSlices);
-        
-        new Timer(1, e -> {
-            rotationAngle += 2;
-            if (rotationAngle >= 360) {
-                rotationAngle %= 360;
-            }
-            spinTime -= 2;
-            repaint();
-            if (spinTime <= 0) {
-                ((Timer) e.getSource()).stop();
-                currentGame.endSpin();
-            }
-        }).start();
     }
 
     private void scramble(){
