@@ -299,7 +299,7 @@ class WordleCanvas extends JComponent implements KeyListener, MouseListener {
  */
 
     public Color getKeyColor(String label) {
-        return keys.get(label).getColor();
+        return keys.get(label.toUpperCase()).getColor();
     }
 
 /**
